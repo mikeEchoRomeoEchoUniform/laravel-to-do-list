@@ -1,43 +1,77 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Lista de Tarefas</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light p-4">
-    <div class="container">
-        <h1 class="mb-4 text-center">📝 Lista de Tarefas</h1>
+@extends('layouts.app')
 
-        <form action="/tasks" method="POST" class="mb-3 d-flex">
-            @csrf
-            <input type="text" name="title" class="form-control me-2" placeholder="Nova tarefa..." required>
-            <button type="submit" class="btn btn-primary">Adicionar</button>
+@section('title', 'Lista de Tarefas')
+
+@section('content')
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h2 class="card-title mb-4 text-center">Suas Tarefas</h2>
+
+    <!-- Form adicionar + busca -->
+    <div class="row mb-3">
+      <div class="col-md-8">
+        <form action="{{ url('/tasks') }}" method="POST" class="d-flex">
+          @csrf
+          <input type="text" name="title" class="form-control me-2" placeholder="Digite uma nova tarefa..." required>
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Adicionar
+          </button>
         </form>
+      </div>
 
-        <ul class="list-group">
-            @foreach ($tasks as $task)
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <form action="/tasks/{{ $task->id }}" method="POST" style="display: inline;">
-                        @csrf
-                        @method('PATCH')
-                        <button class="btn btn-sm {{ $task->completed ? 'btn-success' : 'btn-outline-success' }}">
-                            {{ $task->completed ? '✔' : 'Marcar' }}
-                        </button>
-                    </form>
-
-                    <span class="{{ $task->completed ? 'text-decoration-line-through text-muted' : '' }}">
-                        {{ $task->title }}
-                    </span>
-
-                    <form action="/tasks/{{ $task->id }}" method="POST" style="display: inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn btn-sm btn-danger">Excluir</button>
-                    </form>
-                </li>
-            @endforeach
-        </ul>
+      <div class="col-md-4">
+        <form method="GET" action="{{ url('/tasks') }}" class="d-flex">
+          <input type="text" name="q" value="{{ request('q') }}" class="form-control me-2" placeholder="Buscar...">
+          <button class="btn btn-outline-secondary">Buscar</button>
+        </form>
+      </div>
     </div>
-</body>
-</html>
+
+    <!-- Filtros e contador -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <a href="{{ url('/tasks') }}" class="btn btn-outline-secondary btn-sm {{ request('filter') === null ? 'active' : '' }}">Todas</a>
+        <a href="{{ url('/tasks?filter=pending') }}" class="btn btn-outline-warning btn-sm {{ request('filter') === 'pending' ? 'active' : '' }}">Pendentes</a>
+        <a href="{{ url('/tasks?filter=done') }}" class="btn btn-outline-success btn-sm {{ request('filter') === 'done' ? 'active' : '' }}">Concluídas</a>
+      </div>
+      <div class="text-muted">Total: {{ $tasks->count() }} tarefas</div>
+    </div>
+
+    <!-- Lista -->
+    <ul class="list-group">
+      @forelse ($tasks as $task)
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center">
+            <!-- Marcar como concluída -->
+            <form action="{{ url("/tasks/{$task->id}/toggle") }}" method="POST" style="display:inline;">
+              @csrf
+              <button class="btn btn-sm me-3 {{ $task->completed ? 'btn-success' : 'btn-outline-success' }}">
+                {{ $task->completed ? '✔' : 'Marcar' }}
+              </button>
+            </form>
+
+            <div>
+              <div class="task-title {{ $task->completed ? 'text-decoration-line-through text-muted' : '' }}">
+                {{ $task->title }}
+              </div>
+              <small class="text-muted">Criada em {{ $task->created_at->format('d/m/Y H:i') }}</small>
+            </div>
+          </div>
+
+          <div>
+            <a href="{{ url("/tasks/{$task->id}/edit") }}" class="btn btn-sm btn-outline-info me-1">Editar</a>
+
+            <form action="{{ url("/tasks/{$task->id}") }}" method="POST" style="display:inline;" onsubmit="return confirm('Excluir esta tarefa?');">
+              @csrf
+              @method('DELETE')
+              <button class="btn btn-sm btn-danger">Excluir</button>
+            </form>
+          </div>
+        </li>
+      @empty
+        <li class="list-group-item text-center text-muted">Nenhuma tarefa encontrada.</li>
+      @endforelse
+    </ul>
+  </div>
+</div>
+@endsection
