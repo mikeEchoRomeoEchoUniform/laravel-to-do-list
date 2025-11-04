@@ -29,16 +29,15 @@ class TaskController extends Controller
     }
 
     public function store(Request $request){
-    $request->validate([
-        'title' => 'required|string|max:255'
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'category' => 'required|string',
+        'urgency' => 'required|string',
     ]);
 
-    Task::create([
-        'title' => $request->title,
-        'completed' => false
-    ]);
+    Task::create($validated);
 
-    return redirect('/tasks')->with('success', 'Tarefa adicionada com sucesso!');
+    return redirect('/tasks');
     }
 
     public function edit(Task $task){
