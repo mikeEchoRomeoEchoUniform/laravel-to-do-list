@@ -31,7 +31,16 @@
         </select>
       </div>
 
-      <div class="col-md-2 d-grid">
+      <div class="col-md-2">
+        @if(\Illuminate\Support\Facades\Schema::hasColumn('tasks', 'due_date'))
+          <input type="date" name="due_date" class="form-control">
+        @else
+          <!-- deixa um input oculto (opcional) para não alterar layout se quiser -->
+          <input type="hidden" name="due_date" value="">
+        @endif
+      </div>
+
+      <div class="col-md-15 d-grid">
         <button type="submit" class="btn btn-primary">
           <i class="bi bi-plus-circle"></i> Adicionar
         </button>
@@ -78,13 +87,36 @@
                   <strong>Urgência:</strong> {{ $task->urgency }}
                 </p>
                 <small class="text-muted">Criada em {{ $task->created_at->format('d/m/Y H:i') }}</small>
+                @php
+                  $hasDue = !empty($task->due_date);
+                  // seguro: se due_date vier como string, parse; se já for Carbon, parse aceita
+                  $dueDate = $hasDue ? \Carbon\Carbon::parse($task->due_date) : null;
+                @endphp
+
+                @if($hasDue)
+                  @php
+                  $now = \Carbon\Carbon::now();
+                  $diffDays = $dueDate->diffInDays($now, false); // negative if future? diffInDays with false returns signed
+                  // determine class: overdue (red), near (<=2 days -> warning), else success
+                  $dueClass = $dueDate->isPast() ? 'text-danger fw-bold' : 'text-success';
+                  $diffDays = (int) abs($dueDate->diffInDays($now));
+                  $humanPt = $dueDate->isPast()
+                    ? "há $diffDays " . \Illuminate\Support\Str::plural('dia', $diffDays)
+                    : "em $diffDays " . \Illuminate\Support\Str::plural('dia', $diffDays);
+
+                  @endphp
+
+                <div class="mt-1 small {{ $dueClass }}">
+                  Prazo: {{ $dueDate->format('d/m/Y') }} — {{ $humanPt }}
+                </div>
+                @endif
               </div>
 
               <div class="d-flex justify-content-between align-items-center mt-3">
                 <form action="{{ url("/tasks/{$task->id}/toggle") }}" method="POST">
                   @csrf
                   <button class="btn btn-sm {{ $task->completed ? 'btn-success' : 'btn-outline-success' }}">
-                    {{ $task->completed ? '✔ Concluída' : 'Marcar' }}
+                    {{ $task->completed ? '✔ Concluída' : 'Concluída' }}
                   </button>
                 </form>
 

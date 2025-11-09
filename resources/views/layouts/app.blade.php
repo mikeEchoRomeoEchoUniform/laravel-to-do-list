@@ -23,6 +23,7 @@
     <div class="collapse navbar-collapse" id="navMenu">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item"><a class="nav-link" href="{{ url('/tasks') }}">Tarefas</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ route('tasks.chart') }}">Gráficos</a></li>
       </ul>
     </div>
   </div>

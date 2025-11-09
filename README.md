@@ -1,61 +1,137 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📝 Gerenciador de Tarefas
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Um aplicativo web desenvolvido em **Laravel** para gerenciamento de tarefas com sistema de **prioridades**, **categorias**, **prazos** e **gráficos de desempenho**.
 
-## About Laravel
+## 🚀 Funcionalidades Principais
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+✅ **Cadastro de Tarefas** Crie novas tarefas com título, categoria, urgência e data de prazo.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+✅ **Filtro Dinâmâmico** Visualize tarefas por status (todas, pendentes ou concluídas).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+✅ **Categorização** Classifique suas tarefas em:  
+🏠 *Pessoal*
+💼 *Trabalho*
+📚 *Estudos*
+💊 *Saúde*
 
-## Learning Laravel
+✅ **Níveis de Urgência**
+🔴 *Alta*
+🟡 *Média*
+🟢 *Baixa*
+Cada tarefa exibe uma borda colorida de acordo com sua prioridade.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+✅ **Prazos Inteligentes** - Exibe a data limite de cada tarefa;  
+- Calcula quanto tempo falta ou se está atrasada;  
+- Mostra o prazo de forma clara (ex: “Faltam 3 dias”).
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+✅ **Gráficos Interativos** Visualize:
+- Progresso geral (concluídas, pendentes e atrasadas);
+- Distribuição das tarefas por urgência.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+✅ **Interface Amigável e Responsiva** Layout limpo, cores equilibradas e ícones para rápida identificação.
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## ⚙️ Tecnologias Utilizadas
 
-### Premium Partners
+- **Laravel 10+**
+- **PHP 8.2+**
+- **Bootstrap 5**
+- **Chart.js** (para gráficos)
+- **Carbon** (para manipulação de datas)
+- **SQLite / MySQL** (banco de dados)
+- **Blade Templates**
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+## 🧩 Estrutura do Projeto
+app/Http
+       └── Controller.php
+       └── TaskController.php
+        
+# Lógica principal das tarefas
+app/Models
+         └── Task.php
+    
+# Modelo de dados
+resources/views
+              └── tasks
+                      └── index.blade.php
+        
+# Página principal
+resources/views
+              └── tasks
+                      └── edit.blade.php
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Edição de tarefas
+resources/views
+              └── tasks
+                      └── chart.blade.php
 
-## Code of Conduct
+# Visualização de gráficos
+database/migrations
+    
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 🛠️ Instalação e Configuração
 
-## Security Vulnerabilities
+1.  **Clone o repositório**
+    git clone [https://github.com/mikeEchoRomeoEchoUniform/to-do-list.git](https://github.com/mikeEchoRomeoEchoUniform/to-do-list.git)
+    cd .../to-do-list
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+2.  **Instale as dependências**
+    composer install
 
-## License
+3.  **Configure o ambiente**
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    Copie o arquivo `.env.example`:
+    cp .env.example .env
+
+    Configure seu banco de dados no arquivo `.env`:
+
+    DB_CONNECTION=sqlite
+    DB_DATABASE=/XAMPP/htdocs/to-do-list/database.sqlite
+
+4.  **Gere a chave da aplicação**
+    php artisan key:generate
+
+5.  **Crie as tabelas**
+    php artisan migrate
+
+6.  **Inicie o servidor**
+    php artisan serve
+
+Acesse o projeto em: http://127.0.0.1:8000
+
+---
+
+## 📊 Gráficos
+
+O sistema inclui gráficos automáticos usando Chart.js:
+- **Gráfico de status:** mostra a proporção de tarefas concluídas, pendentes e atrasadas.
+- **Gráfico de urgência:** indica a quantidade de tarefas por nível de prioridade.
+
+Para acessar, visite: `/tasks/chart`
+
+---
+
+## 📅 Prazos
+
+Cada tarefa pode ter um prazo (`due_date`), exibido diretamente na lista:
+- **Verde** → dentro do prazo
+- **Amarelo** → próximo do vencimento (2 dias)
+- **Vermelho** → atrasado
+
+---
+
+## 💡 Melhorias Futuras
+
+- [ ] Adicionar autenticação (login e usuários)
+- [ ] Notificações de tarefas atrasadas
+- [ ] Filtros por categoria
+- [ ] Dark mode 🌙
+
+---
+
+## 👨‍💻 Autor
+
+Desenvolvido por **Arthur Mereu** — estudante de Engenharia Elétrica e de Informática para Internet
